@@ -19,12 +19,25 @@ class UserRepoImpl(db:MongoDatabase) : UserRepository {
     }
 
     override suspend fun getUserById(userUID: String): UserDataModel? {
-       val filter = Document("UUID",userUID)
+       val filter = Document("userId",userUID)
         return userCollection.find(filter).firstOrNull()
     }
 
     override suspend fun getAllUsers(): List<UserDataModel> {
         return userCollection.find().toList()
+    }
+
+    override suspend fun updateUser(
+        userDataModel: UserDataModel
+    ): Boolean {
+        val filterUser = Document("userId",userDataModel.userId)
+        val updateFields = Document()
+            .append("userName",userDataModel.userName)
+            .append("userEmail",userDataModel.userEmail)
+            .append("userMobile",userDataModel.userMobile)
+            .append("userGender",userDataModel.userGender)
+
+        return userCollection.updateOne(filter = filterUser, update = updateFields).wasAcknowledged()
     }
 
 

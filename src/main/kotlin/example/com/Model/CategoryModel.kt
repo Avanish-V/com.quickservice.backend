@@ -6,7 +6,9 @@ import kotlinx.serialization.descriptors.PrimitiveKind
 
 @Serializable
 data class CategoryModel(
-    @SerialName("title") val title: String,
-    @SerialName("id") val id: String,
-    @SerialName("icon") val icon: String
+    @SerialName("categoryTitle") val categoryTitle: String,
+    @SerialName("categoryId") val categoryId: String,
+    @SerialName("imageUrl") val imageUrl: String,
+    @SerialName("type") val type: String? = null,
+
 )

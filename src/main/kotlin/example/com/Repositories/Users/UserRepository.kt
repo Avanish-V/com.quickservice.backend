@@ -10,4 +10,8 @@ interface UserRepository  {
 
     suspend fun getAllUsers():List<UserDataModel>
 
+    suspend fun updateUser(
+      userDataModel: UserDataModel
+    ):Boolean
+
 }

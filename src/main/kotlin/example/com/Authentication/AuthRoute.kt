@@ -17,15 +17,27 @@ fun Route.authRoute(authenticationRepository: AuthenticationRepository) {
             val request = call.receive<User>()
 
             request.idToken.let {token->
-                try {
-                    val firebaseToken: FirebaseToken = FirebaseAuth.getInstance().verifyIdToken(token)
-                    val uid = firebaseToken.uid
 
-                    val user = authenticationRepository.getUser(userId = uid)
+                try {
+
+                    val firebaseToken: FirebaseToken = FirebaseAuth.getInstance().verifyIdToken(token)
+
+                    if (firebaseToken.uid.isEmpty()) return@post call.respond("Unauthorized User!")
+
+                    val user = authenticationRepository.getUser(userId = firebaseToken.uid)
+
 
                     if (user != null) {
 
-                        call.respond(AuthResponse(userId = user.userId, isNewUser = false))
+                        call.respond(
+
+                            AuthResponse(
+                                isVerified = true,
+                                userUID = firebaseToken.uid,
+                                status = "User Exist!"
+                            )
+
+                        )
 
                     } else {
 
@@ -33,23 +45,36 @@ fun Route.authRoute(authenticationRepository: AuthenticationRepository) {
                             userId = firebaseToken.uid,
                             isFirstUser = true,
                             userName = "",
-                            mobile = "",
-                            email = "",
-                            gender = ""
+                            userMobile = "",
+                            userEmail = "",
+                            userGender = ""
                         )
 
                         authenticationRepository.createUser(newUserDataModel)
 
-                        call.respond(AuthResponse(userId = newUserDataModel.userId, isNewUser = true))
+                        call.respond(
+
+                            AuthResponse(
+                                isVerified = true,
+                                userUID = firebaseToken.uid,
+                                status = "User Created!"
+                            )
+
+                        )
 
                     }
+
                 } catch (e: Exception) {
-                    call.respond(AuthResponse(
-                        userId = "",
-                        isNewUser = false,
-                        status = "failure",
-                        reason = e.message
-                    ))
+
+                    call.respond(
+
+                        AuthResponse(
+                            status = "Failed!",
+                            reason = e.message
+                        )
+
+                    )
+
                 }
             }
         }

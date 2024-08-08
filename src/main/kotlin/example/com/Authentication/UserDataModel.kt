@@ -9,8 +9,8 @@ data class UserDataModel(
     @SerialName("userId")val userId: String,
     @SerialName("isFirstUser")val isFirstUser : Boolean,
     @SerialName("userName") val userName : String = "",
-    @SerialName("mobile") val mobile : String = "",
-    @SerialName("email") val email : String = "",
-    @SerialName("gender") val gender : String = "",
+    @SerialName("userMobile") val userMobile : String = "",
+    @SerialName("userEmail") val userEmail : String = "",
+    @SerialName("userGender") val userGender : String = "",
 
 )

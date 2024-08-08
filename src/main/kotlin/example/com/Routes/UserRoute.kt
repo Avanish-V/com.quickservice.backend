@@ -7,6 +7,7 @@ import io.ktor.server.plugins.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import io.ktor.utils.io.core.*
 import org.slf4j.LoggerFactory
 
 
@@ -16,28 +17,8 @@ fun Route.userRoute(userRepository: UserRepository) {
 
     route("/users") {
 
-        post("/createUser") {
-            try {
-                val userData = call.receive<UserDataModel>()
-
-                validateUserData(userData)
-
-                val result = userRepository.createUser(userData)
-                if (result) {
-                    call.respond(HttpStatusCode.Created, mapOf("message" to "User created successfully"))
-                } else {
-                    call.respond(HttpStatusCode.InternalServerError, mapOf("error" to "Failed to create user"))
-                }
-            } catch (e: BadRequestException) {
-                log.error("Bad request: ${e.message}")
-                call.respond(HttpStatusCode.BadRequest, mapOf("error" to e.message))
-            } catch (e: Exception) {
-                log.error("Error creating user: ${e.message}")
-                call.respond(HttpStatusCode.InternalServerError, mapOf("error" to "Internal server error"))
-            }
-        }
-
         get("/userByID/{uuid}") {
+
             val uuid = call.parameters["uuid"]
 
             if (uuid == null) {
@@ -78,6 +59,20 @@ fun Route.userRoute(userRepository: UserRepository) {
 
         }
 
+        patch("/updateUser") {
+
+            val userData = call.receive<UserDataModel>()
+
+            try {
+
+             val result =   userRepository.updateUser(userData)
+             call.respond(result)
+
+            }catch (e:Exception){
+                call.respond(e.message.toString())
+            }
+
+        }
 
     }
 }
@@ -88,7 +83,7 @@ fun validateUserData(userData: UserDataModel) {
         throw BadRequestException("Username cannot be empty!")
     }
 
-    if (userData.gender.isBlank()) {
+    if (userData.userGender.isBlank()) {
         throw BadRequestException("Select gender")
     }
 }

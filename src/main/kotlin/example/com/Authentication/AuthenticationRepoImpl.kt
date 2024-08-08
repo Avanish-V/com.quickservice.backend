@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.firstOrNull
 
 class AuthenticationRepoImpl(db:MongoDatabase) : AuthenticationRepository {
 
-    val userDataModelCollection = db.getCollection<UserDataModel>("User")
+    val userDataModelCollection = db.getCollection<UserDataModel>("Users")
 
     override suspend fun createUser(userDataModel: UserDataModel): Boolean {
         return userDataModelCollection.insertOne(userDataModel).wasAcknowledged()
