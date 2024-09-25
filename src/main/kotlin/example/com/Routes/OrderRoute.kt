@@ -15,6 +15,7 @@ fun Route.ordersRoute(orderRepository: OrderRepository){
         post ("/createOrder"){
 
             try {
+
                 val orders = call.receive<OrdersDataModel>()
                 val result = orderRepository.createOrder(orders)
 
@@ -23,8 +24,11 @@ fun Route.ordersRoute(orderRepository: OrderRepository){
                 }else{
                     call.respond(HttpStatusCode.InternalServerError,"Failed to create")
                 }
+
             }catch (e:Exception){
+
                 call.respond(HttpStatusCode.BadRequest,"Invalid data format")
+
             }
 
         }
@@ -35,12 +39,12 @@ fun Route.ordersRoute(orderRepository: OrderRepository){
                 val ordersData = orderRepository.getOrders()
                 call.respond(HttpStatusCode.OK,ordersData)
             }catch (e:Exception){
-                call.respond(HttpStatusCode.BadRequest,"Invalid data format")
+                call.respond(HttpStatusCode.BadRequest,e.message+"Invalid data format")
             }
 
         }
 
-        get ("/{userUID}"){
+        get ("/getOrdersByUserUID/{userUID}"){
 
             val userUID = call.parameters["userUID"]
 
@@ -56,17 +60,21 @@ fun Route.ordersRoute(orderRepository: OrderRepository){
 
         }
 
-        get ("/{professionalID}"){
+        get ("/getOrdersByProfessionalId/{professionalID}"){
+
+            val professionalId = call.parameters["professionalID"]
+
+            if(professionalId.isNullOrEmpty()) return@get call.respond("Id is missing!")
 
             try {
-                val professionalId = call.parameters["professionalID"]
-                if (professionalId != null){
-                    val data = orderRepository.getOrderByProfessionalId(professionalId)
-                    call.respond(HttpStatusCode.OK,data)
-                }
+
+                val data = orderRepository.getOrderByProfessionalId(professionalId)
+                call.respond(HttpStatusCode.OK,data)
 
             }catch (e:Exception){
+
                 call.respond(HttpStatusCode.BadRequest,"Invalid data format")
+
             }
 
 

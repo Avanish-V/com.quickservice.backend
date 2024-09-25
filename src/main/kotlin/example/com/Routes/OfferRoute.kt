@@ -1,6 +1,6 @@
 package com.example.Routes
 
-import Network.offers.data.OfferDataModel
+import example.com.Repositories.Offer.OfferDataModel
 import com.example.Repositories.Offer.OfferRepository
 import io.ktor.http.*
 import io.ktor.server.application.*

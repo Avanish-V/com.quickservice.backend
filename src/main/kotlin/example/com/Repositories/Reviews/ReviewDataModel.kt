@@ -1,4 +1,4 @@
-package com.example.Model
+package example.com.Repositories.Reviews
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

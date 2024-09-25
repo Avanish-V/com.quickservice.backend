@@ -1,6 +1,6 @@
 package com.example.Repositories.Categories
 
-import com.example.Model.CategoryModel
+import example.com.Repositories.Categories.CategoryModel
 
 interface CategoryRepository  {
 

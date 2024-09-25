@@ -17,17 +17,15 @@ import kotlinx.serialization.json.Json
 
 fun Route.serviceProductRoute(serviceProductRepository: ServiceProductRepository){
 
-
-
     route("/serviceProducts"){
 
-        post {
+        post("/addProduct") {
 
             val multipartPart = call.receiveMultipart()
-            var serviceTitle: String? = null
-            var imageUrl: String? = null
-            var serviceId: String? = null
-            var serviceTAG: String? = null
+            var productTitle: String? = null
+            var productImage: String? = null
+            var productId: String? = null
+            var productTAG: String? = null
             var workType: String? = null
             var price: String? = null
             var serviceTax: String? = null
@@ -40,9 +38,9 @@ fun Route.serviceProductRoute(serviceProductRepository: ServiceProductRepository
                     is PartData.FormItem -> {
 
                         when (part.name) {
-                            "serviceTitle" -> serviceTitle = part.value
-                            "serviceId" -> serviceId = part.value
-                            "serviceTAG" -> serviceTAG = part.value
+                            "productTitle" -> productTitle = part.value
+                            "productId" -> productId = part.value
+                            "productTAG" -> productTAG = part.value
                             "workType" -> workType = part.value
                             "price" -> price = part.value
                             "serviceTax" -> serviceTax = part.value
@@ -56,7 +54,7 @@ fun Route.serviceProductRoute(serviceProductRepository: ServiceProductRepository
 
                         val bytes = part.streamProvider().readBytes()
                         val uploadResult = cloudinary.uploader().upload(bytes, ObjectUtils.emptyMap())
-                        imageUrl = uploadResult["secure_url"] as String
+                        productImage = uploadResult["secure_url"] as String
 
                     }
 
@@ -64,24 +62,23 @@ fun Route.serviceProductRoute(serviceProductRepository: ServiceProductRepository
                 }
             }
 
+            if (productTitle.isNullOrEmpty()) return@post call.respond(HttpStatusCode.BadRequest, "productTitle is  Missing.")
+            if (productTAG.isNullOrEmpty()) return@post call.respond(HttpStatusCode.BadRequest, "productTAG is  Missing.")
+            if (productId.isNullOrEmpty()) return@post call.respond(HttpStatusCode.BadRequest, "productId is  Missing.")
+            if (price.isNullOrEmpty()) return@post call.respond(HttpStatusCode.BadRequest, "price is  Missing.")
+            if (serviceTax.isNullOrEmpty()) return@post call.respond(HttpStatusCode.BadRequest, "serviceTax is  Missing.")
+            if (productImage.isNullOrEmpty()) return@post call.respond(HttpStatusCode.BadRequest, "imageUrl is  Missing.")
+            if (description.isEmpty()) return@post call.respond(HttpStatusCode.BadRequest, "description is  Missing.")
+
+
             try {
-
-                if (serviceTitle == null) return@post call.respond(HttpStatusCode.BadRequest, "serviceTitle is  Missing.")
-                if (serviceTAG == null) return@post call.respond(HttpStatusCode.BadRequest, "serviceTAG is  Missing.")
-                if (serviceId == null) return@post call.respond(HttpStatusCode.BadRequest, "serviceId is  Missing.")
-                if (price == null) return@post call.respond(HttpStatusCode.BadRequest, "price is  Missing.")
-                if (serviceTax == null) return@post call.respond(HttpStatusCode.BadRequest, "serviceTax is  Missing.")
-                if (imageUrl == null) return@post call.respond(HttpStatusCode.BadRequest, "imageUrl is  Missing.")
-                if (description.isEmpty()) return@post call.respond(HttpStatusCode.BadRequest, "description is  Missing.")
-
-
                 val product = serviceProductRepository.insertProduct(
 
                     ServiceProductsModel(
-                        serviceTitle = serviceTitle!!,
-                        imageUrl = imageUrl.toString(),
-                        serviceId = serviceId.toString(),
-                        serviceTAG = serviceTAG.toString(),
+                        productTitle = productTitle!!,
+                        productImage = productImage.toString(),
+                        productId = productId.toString(),
+                        productTAG = productTAG.toString(),
                         workType = workType.toString(),
                         price = price!!.toInt(),
                         tax = serviceTax!!.toInt(),
@@ -90,7 +87,7 @@ fun Route.serviceProductRoute(serviceProductRepository: ServiceProductRepository
                     )
                 )
 
-                imageUrl.let {
+                productImage.let {
                     call.respond(HttpStatusCode.OK, "Product Uploaded Successfully to Server: $product")
                 }
 
@@ -101,9 +98,9 @@ fun Route.serviceProductRoute(serviceProductRepository: ServiceProductRepository
         }
 
 
-        get("/{serviceTAG}") {
+        get("/{productTAG}") {
             try {
-                val id = call.parameters["serviceTAG"]
+                val id = call.parameters["productTAG"]
                 if (id == null) {
                     call.respond(HttpStatusCode.BadRequest, "Service TAG not found")
                 } else {
@@ -115,7 +112,8 @@ fun Route.serviceProductRoute(serviceProductRepository: ServiceProductRepository
             }
         }
 
-        delete("/{serviceId}") {
+
+        delete("/remove/{serviceId}") {
 
             try {
 
@@ -135,10 +133,7 @@ fun Route.serviceProductRoute(serviceProductRepository: ServiceProductRepository
         }
 
 
-
     }
-
-
 
 }
 

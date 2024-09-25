@@ -1,4 +1,4 @@
-package Network.offers.data
+package example.com.Repositories.Offer
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

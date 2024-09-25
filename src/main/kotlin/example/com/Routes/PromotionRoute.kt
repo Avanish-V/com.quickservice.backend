@@ -1,6 +1,6 @@
 package com.example.Routes
 
-import Network.Promotion.data.PromotionDataModel
+import example.com.Repositories.Promotion.PromotionDataModel
 import com.cloudinary.utils.ObjectUtils
 import com.example.Repositories.Promotion.PromotionRepository
 import com.example.cloudinary
@@ -10,7 +10,6 @@ import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import java.text.Normalizer.Form
 
 fun Route.promotionRoute(promotionRepository: PromotionRepository){
 
@@ -58,7 +57,8 @@ fun Route.promotionRoute(promotionRepository: PromotionRepository){
                     imageUrl = imageUrl!!,
                     categoryId = categoryId!!,
                     workType = workType!!
-                ))
+                )
+                )
                 call.respond(HttpStatusCode.OK,response)
 
 

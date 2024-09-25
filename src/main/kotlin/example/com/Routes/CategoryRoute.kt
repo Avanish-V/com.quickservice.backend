@@ -1,19 +1,17 @@
 package com.example.Routes
 
 import com.cloudinary.utils.ObjectUtils
-import com.example.Model.CategoryModel
+import example.com.Repositories.Categories.CategoryModel
 import com.example.Repositories.Categories.CategoryRepository
 import com.example.cloudinary
 import io.ktor.http.*
 import io.ktor.http.content.*
 import io.ktor.server.application.*
-import io.ktor.server.http.content.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.slf4j.LoggerFactory
 import java.io.File
-import java.io.InputStream
 import java.sql.SQLException
 
 fun Route.categoryRoute(categoryRepository: CategoryRepository) {
@@ -22,7 +20,8 @@ fun Route.categoryRoute(categoryRepository: CategoryRepository) {
 
     route("/category") {
 
-        post {
+        post("/addCategory") {
+
             val multipart = call.receiveMultipart()
             var title: String? = null
             var id: String? = null
@@ -36,11 +35,10 @@ fun Route.categoryRoute(categoryRepository: CategoryRepository) {
             multipart.forEachPart { part ->
                 when (part) {
                     is PartData.FormItem -> {
-                        // Log the form item name and value
-                        println("Form item: ${part.name} = ${part.value}")
+
                         when (part.name) {
                             "title" -> title = part.value
-                            "serviceTAG" -> id = part.value // Ensure this name matches the client request
+                            "serviceTAG" -> id = part.value
                         }
                     }
                     is PartData.FileItem -> {
@@ -49,15 +47,6 @@ fun Route.categoryRoute(categoryRepository: CategoryRepository) {
                         val uploadResult = cloudinary.uploader().upload(bytes, ObjectUtils.emptyMap())
                         imageUrl = uploadResult["secure_url"] as String
 
-
-//                        val fileName = part.originalFileName?.replace(" ", "_") ?: "image${System.currentTimeMillis()}"
-//                        val file = File(uploadDir, fileName)
-//                        part.streamProvider().use { input ->
-//                            file.outputStream().buffered().use { output ->
-//                                input.copyTo(output)
-//                            }
-//                        }
-//                        imageUrl = "/upload/products/category/${fileName}"
                     }
                     else -> {}
                 }
@@ -65,15 +54,17 @@ fun Route.categoryRoute(categoryRepository: CategoryRepository) {
 
 
 
-            if (title == null) return@post call.respond(HttpStatusCode.BadRequest, "title Missing")
-            if (id == null) return@post call.respond(HttpStatusCode.BadRequest, "id Missing")
-            if (imageUrl == null) return@post call.respond(HttpStatusCode.BadRequest, "ImageUrl Missing")
+            if (title.isNullOrEmpty()) return@post call.respond(HttpStatusCode.BadRequest, "title Missing")
+            if (id.isNullOrEmpty()) return@post call.respond(HttpStatusCode.BadRequest, "id Missing")
+            if (imageUrl.isNullOrEmpty()) return@post call.respond(HttpStatusCode.BadRequest, "ImageUrl Missing")
 
             try {
+
                 val category = categoryRepository.insertCategory(CategoryModel(title!!, id!!, imageUrl!!))
                 call.respond(HttpStatusCode.OK, "Category Uploaded Successfully to Server: $category")
+
             } catch (e: Exception) {
-                call.respond(HttpStatusCode.InternalServerError, "Error While Uploading Category To Server: ${e.message}")
+                call.respond("Error While Uploading Category To Server: ${e.message}")
             }
         }
 

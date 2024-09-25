@@ -1,14 +1,12 @@
 package com.example.Routes
 
-import com.example.Model.ReviewDataModel
+import example.com.Repositories.Reviews.ReviewDataModel
 import com.example.Repositories.Reviews.ReviewRepository
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import kotlin.math.absoluteValue
-import kotlin.math.roundToInt
 
 fun Route.reviewRoute(reviewRepository: ReviewRepository) {
 

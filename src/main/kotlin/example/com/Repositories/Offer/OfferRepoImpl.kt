@@ -1,8 +1,7 @@
 package com.example.Repositories.Offer
 
-import Network.offers.data.OfferDataModel
+import example.com.Repositories.Offer.OfferDataModel
 import com.example.Authentication.AuthenticationRepository
-import com.example.Repositories.Users.UserRepository
 import com.mongodb.client.model.Filters.eq
 import com.mongodb.client.model.Updates.set
 import com.mongodb.kotlin.client.coroutine.MongoDatabase

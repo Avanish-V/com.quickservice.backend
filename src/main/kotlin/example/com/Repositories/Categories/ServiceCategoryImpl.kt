@@ -1,11 +1,11 @@
 package com.example.Repositories.Categories
 
-import com.example.Model.CategoryModel
+import example.com.Repositories.Categories.CategoryModel
 import com.mongodb.kotlin.client.coroutine.MongoDatabase
 import kotlinx.coroutines.flow.toList
 
 
-class ServiceCategory (db:MongoDatabase): CategoryRepository {
+class ServiceCategoryImpl (db:MongoDatabase): CategoryRepository {
 
     private val  collection = db.getCollection<CategoryModel>("Categories")
 

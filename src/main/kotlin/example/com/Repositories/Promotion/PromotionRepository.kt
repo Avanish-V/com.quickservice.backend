@@ -1,6 +1,6 @@
 package com.example.Repositories.Promotion
 
-import Network.Promotion.data.PromotionDataModel
+import example.com.Repositories.Promotion.PromotionDataModel
 
 interface PromotionRepository {
 

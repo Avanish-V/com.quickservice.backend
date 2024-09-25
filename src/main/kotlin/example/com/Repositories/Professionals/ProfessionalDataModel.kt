@@ -5,7 +5,6 @@ data class ProfessionalDataModel(
     val professionalId : String,
     val professionalName : String,
     val photoUrl : String,
-
     val mobile : String,
     val email : String,
     val adharNumber : String,

@@ -7,10 +7,10 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ServiceProductsModel(
 
-    @SerialName("serviceTitle") val serviceTitle:String,
-    @SerialName("imageUrl") val imageUrl:String,
-    @SerialName("serviceId") val serviceId:String,
-    @SerialName("serviceTAG") val serviceTAG:String,
+    @SerialName("productTitle") val productTitle:String,
+    @SerialName("productImage") val productImage:String,
+    @SerialName("productId") val productId:String,
+    @SerialName("productTAG") val productTAG:String,
     @SerialName("workType") val workType:String,
     @SerialName("price") val price: Int,
     @SerialName("tax") val tax: Int,

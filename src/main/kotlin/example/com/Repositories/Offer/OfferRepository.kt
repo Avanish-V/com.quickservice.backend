@@ -1,6 +1,6 @@
 package com.example.Repositories.Offer
 
-import Network.offers.data.OfferDataModel
+import example.com.Repositories.Offer.OfferDataModel
 
 interface OfferRepository {
 

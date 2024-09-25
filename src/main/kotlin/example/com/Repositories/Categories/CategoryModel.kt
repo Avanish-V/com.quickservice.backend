@@ -1,8 +1,7 @@
-package com.example.Model
+package example.com.Repositories.Categories
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.descriptors.PrimitiveKind
 
 @Serializable
 data class CategoryModel(

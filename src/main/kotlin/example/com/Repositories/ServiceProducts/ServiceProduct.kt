@@ -1,13 +1,12 @@
 package com.example.Repositories.ServiceProducts
 
 import com.example.Model.Rating
-import com.example.Model.ReviewDataModel
+import example.com.Repositories.Reviews.ReviewDataModel
 import com.example.Model.ServiceProductsModel
 import com.mongodb.client.model.Filters.eq
 import com.mongodb.kotlin.client.coroutine.MongoDatabase
 import kotlinx.coroutines.flow.toList
 import org.bson.Document
-import org.bson.types.ObjectId
 
 class ServiceProduct (db:MongoDatabase): ServiceProductRepository {
 
@@ -22,11 +21,11 @@ class ServiceProduct (db:MongoDatabase): ServiceProductRepository {
 
     override suspend fun getServiceProduct(id:String): List<ServiceProductsModel> {
 
-        val allProducts = productCollection.find(eq("serviceTAG",id)).toList()
+        val allProducts = productCollection.find(eq("productTAG",id)).toList()
 
         return allProducts.map { product ->
 
-            val filter = Document("serviceProductId",product.serviceId)
+            val filter = Document("serviceProductId",product.productId)
             val productRatings = reviewCollection.find(filter).toList()
 
             val averageRating = if (productRatings.isNotEmpty()) {
@@ -42,10 +41,10 @@ class ServiceProduct (db:MongoDatabase): ServiceProductRepository {
 
 
             ServiceProductsModel(
-                serviceTitle = product.serviceTitle,
-                imageUrl = product.imageUrl,
-                serviceId = product.serviceId,
-                serviceTAG = product.serviceTAG,
+                productTitle = product.productTitle,
+                productImage = product.productImage,
+                productId = product.productId,
+                productTAG = product.productTAG,
                 workType = product.workType,
                 price = product.price,
                 tax = product.tax,

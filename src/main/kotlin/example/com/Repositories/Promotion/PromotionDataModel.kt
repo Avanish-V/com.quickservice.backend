@@ -1,4 +1,4 @@
-package Network.Promotion.data
+package example.com.Repositories.Promotion
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

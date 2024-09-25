@@ -1,6 +1,6 @@
 package com.example.Repositories.Reviews
 
-import com.example.Model.ReviewDataModel
+import example.com.Repositories.Reviews.ReviewDataModel
 
 interface ReviewRepository {
 
