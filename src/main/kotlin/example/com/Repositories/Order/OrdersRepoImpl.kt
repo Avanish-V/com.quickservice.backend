@@ -35,7 +35,7 @@ class OrdersRepoImpl(db:MongoDatabase):OrderRepository {
     override suspend fun getOrderByProfessionalId(professionalId: String):List<OrdersDataModel> {
 
         val filter = Document("professionalID", professionalId)
-        return orderCollection.find().toList()
+        return orderCollection.find(filter).toList()
 
     }
 
