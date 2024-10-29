@@ -11,9 +11,11 @@ data class OrdersDataModel(
     @SerialName("productInfo") val productInfo: ProductInfo,
     @SerialName("priceDetails") val priceDetails: PriceDetails,
     @SerialName("address") val address: UserAddressDataModel,
-    @SerialName("dateTime") val dateTime: DateTime,
+    @SerialName("deliveryDate")val deliveryDate: DeliveryDate,
+    @SerialName("bookingDate")val bookingDate: String,
     @SerialName("status") var status: String,
     @SerialName("professionalID") val professionalID: String = "",
+    @SerialName("applianceDetail")val applianceDetail: ApplianceDetails? = null,
 
     )
 
@@ -23,8 +25,16 @@ data class ProductInfo(
     @SerialName("productId") val productId: String
 )
 
+
 @Serializable
-data class DateTime(
+data class ApplianceDetails(
+    @SerialName("brandImage") val brandImage: String,
+    @SerialName("model") val model: String,
+    @SerialName("description") val description: String,
+)
+
+@Serializable
+data class DeliveryDate(
     @SerialName("date") val date: String,
     @SerialName("time") val time: String
 )

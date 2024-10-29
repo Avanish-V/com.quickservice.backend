@@ -79,11 +79,11 @@ fun Route.userRoute(userRepository: UserRepository) {
 
 
 fun validateUserData(userData: UserDataModel) {
-    if (userData.userName.isBlank()) {
+    if (userData.userName?.isBlank() == true) {
         throw BadRequestException("Username cannot be empty!")
     }
 
-    if (userData.userGender.isBlank()) {
+    if (userData.userGender?.isBlank() == true) {
         throw BadRequestException("Select gender")
     }
 }

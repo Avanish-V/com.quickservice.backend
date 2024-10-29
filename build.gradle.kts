@@ -37,4 +37,11 @@ dependencies {
     implementation ("com.google.firebase:firebase-admin:9.3.0")
 
 
+    implementation("io.ktor:ktor-server-auth-jvm")
+    implementation("io.ktor:ktor-server-auth-jwt-jvm")
+    implementation("io.ktor:ktor-server-netty-jvm")
+    testImplementation("io.ktor:ktor-server-tests-jvm")
+    implementation("io.ktor:ktor-client-cio:2.3.0")
+
+    implementation("commons-codec:commons-codec:1.15")
 }

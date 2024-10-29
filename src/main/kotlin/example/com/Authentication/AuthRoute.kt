@@ -41,16 +41,16 @@ fun Route.authRoute(authenticationRepository: AuthenticationRepository) {
 
                     } else {
 
-                        val newUserDataModel = UserDataModel(
-                            userId = firebaseToken.uid,
-                            isFirstUser = true,
-                            userName = "",
-                            userMobile = "",
-                            userEmail = "",
-                            userGender = ""
-                        )
+//                        val newUserDataModel = UserDataModel(
+//
+//                            isFirstUser = true,
+//                            userName = "",
+//                            userMobile = "",
+//                            userEmail = "",
+//                            userGender = ""
+//                        )
 
-                        authenticationRepository.createUser(newUserDataModel)
+                        //authenticationRepository.createUser(newUserDataModel)
 
                         call.respond(
 

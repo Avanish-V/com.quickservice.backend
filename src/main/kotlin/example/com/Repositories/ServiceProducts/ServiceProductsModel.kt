@@ -15,7 +15,8 @@ data class ServiceProductsModel(
     @SerialName("price") val price: Int,
     @SerialName("tax") val tax: Int,
     @SerialName("description") val description: List<Description>,
-    @SerialName("rating") val rating : Rating
+    @SerialName("rating") val rating : Rating,
+    @SerialName("offerAvailable") val offerAvailable : Int? = null
 
 )
 

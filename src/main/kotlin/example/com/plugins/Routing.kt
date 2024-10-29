@@ -2,6 +2,8 @@ package com.example.plugins
 
 import com.example.Authentication.AuthenticationRepository
 import com.example.Authentication.authRoute
+import com.example.Hashing.HashingService
+import com.example.Model.UserDataSource
 import com.example.Repositories.Categories.CategoryRepository
 import com.example.Repositories.Offer.OfferRepository
 import com.example.Repositories.Order.OrderRepository
@@ -13,6 +15,14 @@ import com.example.Repositories.Reviews.ReviewRepository
 import com.example.Repositories.ServiceProducts.ServiceProductRepository
 import com.example.Repositories.Users.UserRepository
 import com.example.Routes.*
+import com.example.Security.JwtTokenService
+import com.example.Security.TokenConfig
+import com.plcoding.authenticate
+import com.plcoding.getSecretInfo
+import com.plcoding.signIn
+import com.plcoding.signUp
+import example.com.CustomOTPAuth.OtpAuthRepository
+import example.com.Routes.otpAuthRoute
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.response.*
@@ -31,7 +41,8 @@ fun Application.configureRouting(
     reviewRepository: ReviewRepository,
     authenticationRepository: AuthenticationRepository,
     priceCalculationRepository: PriceCalculationRepository,
-    rateCardRepository: RateCardRepository
+    rateCardRepository: RateCardRepository,
+    otpAuthRepository: OtpAuthRepository
 ) {
 
 
@@ -55,7 +66,25 @@ fun Application.configureRouting(
         authRoute(authenticationRepository)
         priceCalculationRoute(priceCalculationRepository)
         rateCardRoute(rateCardRepository)
+        otpAuthRoute(otpAuthRepository)
 
     }
 
+}
+
+fun Application.authConfigureRouting(
+    userDataSource: UserDataSource,
+    hashingService: HashingService,
+    tokenService: JwtTokenService,
+    config: TokenConfig
+) {
+    routing {
+
+        signIn(userDataSource,hashingService,tokenService,config)
+        signUp(hashingService,userDataSource)
+        authenticate()
+        getSecretInfo()
+
+
+    }
 }

@@ -12,9 +12,25 @@ class OfferRepoImpl(db:MongoDatabase,private val authenticationRepository: Authe
 
     val collection = db.getCollection<OfferDataModel>("Offer")
 
+    // These are functions for admin panel
+
     override suspend fun createOffer(offerDataModel: OfferDataModel): Boolean {
        return collection.insertOne(offerDataModel).wasAcknowledged()
     }
+
+    override suspend fun getOfferListForAdmin(): List<OfferDataModel> {
+        return collection.find().toList()
+    }
+
+    override suspend fun updateStatus(status: Boolean,id:String): Boolean {
+        return collection.updateOne(eq("promoCode",id),set("status",status)).wasAcknowledged()
+    }
+
+    override suspend fun deleteOffer(id: String): Boolean {
+        return collection.deleteOne(eq("promoCode",id)).wasAcknowledged()
+    }
+
+    //These are functions for client
 
     override suspend fun getOffer(userId: String): List<OfferDataModel> {
 
@@ -41,8 +57,10 @@ class OfferRepoImpl(db:MongoDatabase,private val authenticationRepository: Authe
 
         val filter1 = Document()
             .append("status",true) // Assuming status should be "active"
-            .append("workType", workType)
-            .append("appliesTo", "All Products")
+            .append("workType", "All")
+            .append("productTAG", productTAG)
+            .append("appliesTo", "Category")
+            .append("userType", "All Users")
 
 
         val filter2 = Document()
@@ -50,18 +68,24 @@ class OfferRepoImpl(db:MongoDatabase,private val authenticationRepository: Authe
             .append("workType", workType)
             .append("productTAG", productTAG)
             .append("appliesTo", "Category")
+            .append("userType", "All Users")
 
         val filter3 = Document()
             .append("status",true) // Assuming status should be "active"
             .append("workType", workType)
             .append("productTAG", productTAG)
             .append("productId", productId)
-
+//
         val filter4 = Document()
             .append("status",true) // Assuming status should be "active"
+            .append("appliesTo", "All Products")
             .append("userType", "First User")
 
-
+        val filter5 = Document()
+            .append("status",true) // Assuming status should be "active"
+            .append("appliesTo", "All Products")
+            .append("userType", "All Users")
+            .append("workType", "All")
 
 
         val user = authenticationRepository.getUser(userId)
@@ -83,7 +107,7 @@ class OfferRepoImpl(db:MongoDatabase,private val authenticationRepository: Authe
             }
 
         }
-
+//
         val applyThirdFilter = collection.find(filter3).toList()
 
         if (applyThirdFilter.isNotEmpty()){
@@ -93,7 +117,7 @@ class OfferRepoImpl(db:MongoDatabase,private val authenticationRepository: Authe
             }
 
         }
-
+//
         if (user.isFirstUser){
 
             val applyFourthFilter = collection.find(filter4).toList()
@@ -106,22 +130,21 @@ class OfferRepoImpl(db:MongoDatabase,private val authenticationRepository: Authe
             }
         }
 
+        val applyFifthFilter = collection.find(filter5).toList()
+
+        if (applyFifthFilter.isNotEmpty()){
+            applyFifthFilter.map {
+                list.add(it)
+
+            }
+
+        }
+
         return list
 
     }
 
-    override suspend fun getOfferListForAdmin(): List<OfferDataModel> {
-        return collection.find().toList()
-    }
 
-
-    override suspend fun updateStatus(status: Boolean,id:String): Boolean {
-       return collection.updateOne(eq("promoCode",id),set("status",status)).wasAcknowledged()
-    }
-
-    override suspend fun deleteOffer(id: String): Boolean {
-        return collection.deleteOne(eq("promoCode",id)).wasAcknowledged()
-    }
 
 
 }

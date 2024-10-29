@@ -30,7 +30,7 @@ class UserRepoImpl(db:MongoDatabase) : UserRepository {
     override suspend fun updateUser(
         userDataModel: UserDataModel
     ): Boolean {
-        val filterUser = Document("userId",userDataModel.userId)
+        val filterUser = Document("userId",userDataModel.userUID)
         val updateFields = Document()
             .append("userName",userDataModel.userName)
             .append("userEmail",userDataModel.userEmail)
