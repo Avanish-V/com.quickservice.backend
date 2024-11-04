@@ -14,9 +14,7 @@ fun Route.otpAuthRoute(authRepository: OtpAuthRepository){
 
     route("/OtpAuth"){
 
-        val accountSid = "AC651a5fa05b5a1891d758fd8584d45b44"
-        val authToken = "eb4775b477810921be2a6248d5535354"
-
+     
         post ("/generateOTP/{phoneNumber}"){
 
             try {
