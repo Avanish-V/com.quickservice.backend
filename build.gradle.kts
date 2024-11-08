@@ -49,6 +49,8 @@ dependencies {
     implementation("commons-codec:commons-codec:1.15")
 }
 
+
+
 tasks.getByName("build").finalizedBy("installDist")
 
 tasks.withType<Jar> {
