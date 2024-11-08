@@ -15,7 +15,7 @@ data class CreateServiceDataModel(
     val verify_event_subscription_enabled: Boolean,
     val date_updated: String,
     val totp: Totp,
-    val code_length: Int,
+    val code_length: Int = 4,
     val custom_code_enabled: Boolean,
     val sid: String,
     val push: Push,

@@ -98,6 +98,7 @@ fun Route.serviceProductRoute(serviceProductRepository: ServiceProductRepository
         }
 
 
+
         get("/{UUID}/{productTAG}") {
             try {
                 val id = call.parameters["productTAG"]
@@ -107,6 +108,20 @@ fun Route.serviceProductRoute(serviceProductRepository: ServiceProductRepository
                 if (userUID == null) return@get call.respond(HttpStatusCode.BadRequest,"UUID")
 
                 val getProduct = serviceProductRepository.getServiceProduct(id,userUID)
+                call.respond(HttpStatusCode.OK, getProduct)
+
+            } catch (e: Exception) {
+                call.respond(HttpStatusCode.InternalServerError, "Failed to retrieve products: ${e.message}")
+            }
+        }
+
+
+
+        get("{productTAG}") {
+            try {
+                val id = call.parameters["productTAG"] ?: return@get call.respond(HttpStatusCode.BadRequest,"productTAG")
+
+                val getProduct = serviceProductRepository.getServiceProductForAdmin(id)
                 call.respond(HttpStatusCode.OK, getProduct)
 
             } catch (e: Exception) {

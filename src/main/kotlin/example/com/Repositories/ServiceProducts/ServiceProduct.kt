@@ -150,6 +150,46 @@ class ServiceProduct (db:MongoDatabase,private val userAuthenticationRepository:
         }
     }
 
+    override suspend fun getServiceProductForAdmin(id: String): List<ServiceProductsModel> {
+        val allProducts = productCollection.find(eq("productTAG",id)).toList()
+
+        return allProducts.map { product ->
+
+            val filter = Document("serviceProductId",product.productId)
+            val productRatings = reviewCollection.find(filter).toList()
+
+            val averageRating = if (productRatings.isNotEmpty()) {
+                productRatings.map { it.rating }.average()
+            } else {
+                0.0
+            }
+            val ratingCount = if (productRatings.isNotEmpty()) {
+                productRatings.map { it.rating }.count()
+            } else {
+                0
+            }
+
+            //val list = mutableListOf<OfferDataModel>()
+
+            ServiceProductsModel(
+                productTitle = product.productTitle,
+                productImage = product.productImage,
+                productId = product.productId,
+                productTAG = product.productTAG,
+                workType = product.workType,
+                price = product.price,
+                tax = product.tax,
+                description = product.description,
+                rating = Rating(
+                    rating = String.format("%.1f", averageRating),
+                    count = ratingCount.toString(),
+
+                    ),
+               // offerAvailable = list.count()
+            )
+        }
+    }
+
     override suspend fun deleteProduct(id: String): Boolean {
         return productCollection.deleteOne(eq("serviceId",id)).wasAcknowledged()
     }
