@@ -30,6 +30,9 @@ dependencies {
     testImplementation(libs.ktor.server.test.host)
     testImplementation(libs.kotlin.test.junit)
 
+    implementation("io.ktor:ktor-server-netty:2.2.3")
+
+
     implementation("org.mongodb:mongodb-driver-kotlin-coroutine:5.1.2")
     implementation("org.mongodb:bson-kotlinx:5.1.0")
 
@@ -45,6 +48,8 @@ dependencies {
 
     implementation("commons-codec:commons-codec:1.15")
 }
+
+tasks.getByName("build").finalizedBy("installDist")
 
 tasks.withType<Jar> {
     // Otherwise you'll get a "No main manifest attribute" error
