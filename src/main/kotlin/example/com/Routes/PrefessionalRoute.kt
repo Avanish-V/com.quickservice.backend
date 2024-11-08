@@ -151,11 +151,7 @@ fun Route.professionalRoute(professionalInterface: ProfessionalInterface) {
 
             val professional = professionalInterface.getProfessionalById(id)
 
-            if (professional == null) {
-                call.respond(HttpStatusCode.NotFound, "Professional not found")
-            } else {
-                call.respond(HttpStatusCode.OK, professional)
-            }
+            call.respond(HttpStatusCode.OK, professional)
         }
 
     }
