@@ -25,10 +25,13 @@ import example.com.CustomOTPAuth.OtpAuthImplementation
 import example.com.CustomOTPAuth.OtpAuthRepository
 import io.ktor.client.*
 import io.ktor.server.application.*
+import io.ktor.server.engine.*
+import io.ktor.server.netty.*
 
 
 fun main(args: Array<String>) {
-    io.ktor.server.netty.EngineMain.main(args)
+    embeddedServer(Netty, port = 8082, host = "0.0.0.0", module = Application::module)
+        .start(wait = true)
 }
 
 fun Application.module() {
